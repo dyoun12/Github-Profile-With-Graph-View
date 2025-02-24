@@ -1,0 +1,38 @@
+name: Generate Graph View JSON
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  generate-graph:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: |
+        npm install
+
+    - name: Generate graph view JSON
+      run: |
+        node ./.github/workflows/GraphView.js
+
+    - name: Commit graphView.json
+      run: |
+        git config --global user.email "gdaeyeon002@gmail.com"
+        git config --global user.name "dyoun12"
+        git add graphView.json
+        git commit -m "Generate graph view JSON"
+        # Use GITHUB_TOKEN for authentication
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/dyoun12/knowledge.git
