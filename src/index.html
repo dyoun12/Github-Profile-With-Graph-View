@@ -5,10 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>dyoun12's Notes</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #ebebeb;
+        }
+        .nav { 
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+        .title {
+            margin: 0;
+            color: #999;
+            padding: 20px 40px;
         }
         .node {
             fill: steelblue;
@@ -23,6 +40,9 @@
     </style>
 </head>
 <body>
+    <div class="nav">
+        <h1 class="title">dyoun12's Notes</h1>
+    </div>
     <svg style="width: 100vw; height:100vh"></svg>
 
     <script>
@@ -65,7 +85,10 @@
                 .force("charge", d3.forceManyBody().strength(-1000))
                 .force("center", d3.forceCenter(width / 2, height / 2))
                 .force("x", d3.forceX())
-                .force("y", d3.forceY());
+                .force("y", d3.forceY())
+                .force("radial", d3.forceRadial(200, width / 2, height / 2))
+                .force("collision", d3.forceCollide().radius(40)); // 추가: 노드 간 거리 확보
+
     
             // 링크 추가
             const link = g.append("g")
@@ -262,6 +285,12 @@
             if (graphData) {
                 drawGraph(graphData.nodes, graphData.links);
             }
+
+            Swal.fire({
+                icon: "info",
+                title: "반갑습니다!",
+                html: "마우스를 통해 줌인/아웃, 드래그가 가능합니다. <br> 노드를 클릭해 노트를 확인해 보세요!",
+            });
         });
     </script>
         
